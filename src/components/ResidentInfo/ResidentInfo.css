@@ -1,0 +1,51 @@
+.card__residents {
+  width: 40vh;
+  height: 90vh;
+  background-color: #062226;
+  color: white;
+}
+.residents__tittle {
+  font-size: 3vh;
+}
+.card__residents__img {
+  width: 100%;
+}
+.container__img__status {
+  position: relative;
+  display: inline-block;
+}
+.status__live {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 1vh 3vh;
+  background-color: #062226;
+  border-radius: 5vh;
+}
+.container__characteristics {
+  margin-left: 2vh;
+}
+hr {
+  color: #062226;
+}
+b {
+  font-size: 2vh;
+  color: rgb(169, 166, 166);
+}
+p {
+  display: flex;
+  flex-direction: column;
+  font-size: 3vh;
+}
+@media screen and (max-width: 609px) {
+  .card__residents {
+    width: 30vh;
+    height: 70.65vh;
+  }
+  p {
+    font-size: 2.78vh;
+  }
+  h3 {
+    font-size: 2vh;
+  }
+}

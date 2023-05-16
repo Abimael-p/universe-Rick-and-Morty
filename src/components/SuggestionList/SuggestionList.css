@@ -1,0 +1,24 @@
+.style__suggestion {
+  position: absolute;
+  list-style: none;
+  cursor: pointer;
+  right: 30%;
+  left: 30%;
+  max-height: 33vh;
+  overflow-y: auto;
+  color: white;
+  background-color: #092b30;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+@media screen and (max-width: 609px) {
+  .style__suggestion {
+    max-height: 20vh;
+    right: 10%;
+    left: 10%;
+  }
+}
