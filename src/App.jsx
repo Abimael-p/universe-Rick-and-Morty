@@ -10,10 +10,10 @@ function App() {
   const [residentIds, setResidentIds] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState([]);
-  const [selectedSuggestion, setSelectedSuggestion] = useState(""); // Estado para almacenar la sugerencia seleccionada
+  const [selectedSuggestion, setSelectedSuggestion] = useState("");
+  const [loading, setLoading] = useState(true); // Estado para indicar si se está cargando la información
 
   useEffect(() => {
-    // Función para obtener una ubicación aleatoria al cargar la página
     const fetchRandomLocation = async () => {
       try {
         let locationData = null;
@@ -27,8 +27,10 @@ function App() {
         }
         setLocation(locationData);
         setResidentIds(residentIds);
+        setLoading(false); // Termina la carga de información
       } catch (error) {
         console.error("Error fetching random location:", error);
+        setLoading(false); // Termina la carga de información en caso de error
       }
     };
 
@@ -36,6 +38,10 @@ function App() {
   }, []);
 
   const handleSearch = async () => {
+    // Resto del código...
+
+    setLoading(true); // Inicia la carga de información al realizar la búsqueda
+
     if (searchTerm) {
       try {
         const response = await LocationService.searchLocationsByName(
@@ -48,11 +54,13 @@ function App() {
             residentUrl.split("/").pop()
           )
         );
-        setSelectedSuggestion(""); // Reiniciar la sugerencia seleccionada
-        setSearchTerm(""); // Reiniciar el término de búsqueda
-        setSuggestions([]); // Limpiar las sugerencias
+        setSelectedSuggestion("");
+        setSearchTerm("");
+        setSuggestions([]);
+        setLoading(false); // Termina la carga de información
       } catch (error) {
         console.error("Error fetching location data:", error);
+        setLoading(false); // Termina la carga de información en caso de error
       }
     }
   };
@@ -96,7 +104,7 @@ function App() {
 
   return (
     <>
-      <header className="header__container">
+       <header className="header__container">
         <div className="container__tittle">
           <h1 className="app__tittle">RICK AND MORTY</h1>
         </div>
@@ -120,13 +128,17 @@ function App() {
         </div>
       </header>
       <section className="dimension__details">
-        {location && (
-          <Location
-            name={location.name}
-            type={location.type}
-            dimension={location.dimension}
-            residentCount={location.residents.length}
-          />
+        {loading ? (
+          <p>Loading location...</p> // Pantalla de carga mientras se obtiene la ubicación
+        ) : (
+          location && (
+            <Location
+              name={location.name}
+              type={location.type}
+              dimension={location.dimension}
+              residentCount={location.residents.length}
+            />
+          )
         )}
       </section>
       <section>

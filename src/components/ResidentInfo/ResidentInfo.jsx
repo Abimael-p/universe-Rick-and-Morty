@@ -50,3 +50,4 @@ const ResidentInfo = ({ residentUrl }) => {
 };
 
 export default ResidentInfo;
+
