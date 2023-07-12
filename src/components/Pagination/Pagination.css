@@ -30,3 +30,17 @@
     color: rgb(8, 61, 34);
   }
   
+  @media screen and (max-width: 728px){
+    .pagination {
+      font-size: 6vh;
+    }
+    .pagination .number {
+      font-size: 4vh;
+    }
+  }
+
+  @media screen and (max-width: 401px) {
+    .pagination .number {
+      font-size: 2vh;
+    }
+  }
