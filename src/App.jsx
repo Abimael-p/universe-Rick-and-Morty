@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import LocationService from "./services/LocationService";
 import Location from "./components/Location/Location";
 import ResidentInfo from "./components/ResidentInfo/ResidentInfo";
 import SuggestionList from "./components/SuggestionList/SuggestionList";
+import Pagination from "./components/Pagination/Pagination";
 import "./App.css";
 
 function App() {
@@ -11,7 +12,12 @@ function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [selectedSuggestion, setSelectedSuggestion] = useState("");
-  const [loading, setLoading] = useState(true); // Estado para indicar si se está cargando la información
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   useEffect(() => {
     const fetchRandomLocation = async () => {
@@ -27,10 +33,10 @@ function App() {
         }
         setLocation(locationData);
         setResidentIds(residentIds);
-        setLoading(false); // Termina la carga de información
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching random location:", error);
-        setLoading(false); // Termina la carga de información en caso de error
+        setLoading(false);
       }
     };
 
@@ -38,9 +44,7 @@ function App() {
   }, []);
 
   const handleSearch = async () => {
-    // Resto del código...
-
-    setLoading(true); // Inicia la carga de información al realizar la búsqueda
+    setLoading(true);
 
     if (searchTerm) {
       try {
@@ -57,10 +61,10 @@ function App() {
         setSelectedSuggestion("");
         setSearchTerm("");
         setSuggestions([]);
-        setLoading(false); // Termina la carga de información
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching location data:", error);
-        setLoading(false); // Termina la carga de información en caso de error
+        setLoading(false);
       }
     }
   };
@@ -78,13 +82,11 @@ function App() {
         console.error("Error fetching location suggestions:", error);
       }
     } else {
-      setSuggestions([]); // Limpiar las sugerencias cuando el campo de búsqueda está vacío
+      setSuggestions([]);
     }
   };
 
   const handleSuggestionClick = async (suggestion) => {
-    console.log("Sugerencia seleccionada:", suggestion);
-
     try {
       const response = await LocationService.searchLocationsByName(suggestion);
       const locationData = response.results[0];
@@ -94,9 +96,9 @@ function App() {
           residentUrl.split("/").pop()
         )
       );
-      setSelectedSuggestion(suggestion); // Establecer la sugerencia seleccionada
-      setSearchTerm(""); // Reiniciar el término de búsqueda
-      setSuggestions([]); // Limpiar las sugerencias
+      setSelectedSuggestion(suggestion);
+      setSearchTerm("");
+      setSuggestions([]);
     } catch (error) {
       console.error("Error fetching location data:", error);
     }
@@ -104,7 +106,7 @@ function App() {
 
   return (
     <>
-       <header className="header__container">
+      <header className="header__container">
         <div className="container__tittle">
           <h1 className="app__tittle">RICK AND MORTY</h1>
         </div>
@@ -129,7 +131,7 @@ function App() {
       </header>
       <section className="dimension__details">
         {loading ? (
-          <p>Loading location...</p> // Pantalla de carga mientras se obtiene la ubicación
+          <p>Loading location...</p>
         ) : (
           location && (
             <Location
@@ -143,12 +145,20 @@ function App() {
       </section>
       <section>
         <div className="residents__container">
-          {residentIds.map((residentId) => (
-            <ResidentInfo
-              key={residentId}
-              residentUrl={`https://rickandmortyapi.com/api/character/${residentId}`}
-            />
-          ))}
+          {residentIds
+            .slice((currentPage - 1) * 8, currentPage * 8)
+            .map((residentId) => (
+              <ResidentInfo
+                key={residentId}
+                residentUrl={`https://rickandmortyapi.com/api/character/${residentId}`}
+              />
+            ))}
+        </div>
+        <div>
+          <Pagination
+            totalPages={Math.ceil(residentIds.length / 8)}
+            onPageChange={handlePageChange}
+          />
         </div>
       </section>
     </>

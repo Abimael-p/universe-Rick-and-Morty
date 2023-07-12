@@ -1,0 +1,32 @@
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    color: rgb(45, 223, 36);
+    font-size: 9vh;
+  }
+  
+  .pagination .arrow {
+    margin: 0 10px;
+    cursor: pointer;
+  }
+  
+  .pagination .number {
+    margin: 0 5px;
+    cursor: pointer;
+  }
+
+  .pagination .arrow:hover {
+    transform: translateY(-4px);
+  }
+
+  .pagination .number:hover {
+    transform: translateY(-2px);
+  }
+  
+  .pagination .number.active {
+    font-weight: bolder;
+    color: rgb(8, 61, 34);
+  }
+  
